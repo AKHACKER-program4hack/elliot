@@ -51,8 +51,8 @@ for more info see the video on youtube
 ```
 For more info see the video on Official YouTube Channel Of AK.HACKER.
 ```
-<a href="https://youtu.be/ifkGhxhlV6Q"><img src="https://img.shields.io/badge/How%20To%20Deploy-blue.svg?logo=Youtube"></a>
-<a href="https://youtu.be/ifkGhxhlV6Q"><img src="https://img.shields.io/youtube/views/ifkGhxhlV6Q?style=social"></a>
+<a href="https://youtu.be/DSOOCnM8mXk"><img src="https://img.shields.io/badge/How%20To%20Deploy-blue.svg?logo=Youtube"></a>
+<a href="https://youtu.be/DSOOCnM8mXk"><img src="https://img.shields.io/youtube/views/DSOOCnM8mXk?style=social"></a>
 
 # Follow me on Social media
 > instagram : akhacker_program4hack
