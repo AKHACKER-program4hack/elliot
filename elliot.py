@@ -7,7 +7,7 @@ import string
 import argparse
 import os
 import sys
-
+import time
 
 lower = string.ascii_lowercase
 upper = string.ascii_uppercase
@@ -15,6 +15,12 @@ num = string.digits
 symbols = "!@#$%^&*?,()-=+[]/;"
 
 defaultwordlist = "wordlist/rockyou.txt"
+
+
+def timer(start, end):
+    hours, rem = divmod(end-start, 3600)
+    minutes, seconds = divmod(rem, 60)
+    return "{:0>2}:{:0>2}:{:05.2f}".format(int(hours), int(minutes), seconds)
 
 
 def resumecrack(sessionfile):
@@ -34,7 +40,6 @@ def resumecrack(sessionfile):
                     hashtocrack = data[1]
                     min_lenght, max_lenght = data[2].split(" ")
                     current_i = data[3]
-
 
                     current = data[4][:1]
                     c = data[5].find(current)
@@ -56,9 +61,10 @@ def resumecrack(sessionfile):
 
 
 def customcrack(chrs, min_lenght, max_length, hashtocrack, outputfile, sessionfile=None):
-    check = bool(re.match(r"([a-fA-F\d]{32}$)",hashtocrack))
+    check = bool(re.match(r"([a-fA-F\d]{32}$)", hashtocrack))
     if check:
         try:
+            starting_time = time.time()
             for n in range(min_lenght, max_length + 1):
                 for x in itertools.product(chrs, repeat=n):
                     password = "".join(x)
@@ -66,12 +72,18 @@ def customcrack(chrs, min_lenght, max_length, hashtocrack, outputfile, sessionfi
                     try:
                         print(
                             f"\rtrying password  : {password}", end='\r', flush=True)
-                        hash = hashlib.md5(password.encode("UTF-8")).hexdigest()
+                        hash = hashlib.md5(
+                            password.encode("UTF-8")).hexdigest()
                         if hash == hashtocrack:
                             print("\r\nPassword : " + str(password))
                             with open(outputfile, "w") as ou:
                                 ou.write(password)
                             break
+                        if sessionfile != None and "00:05:00" in timer(starting_time, time.time()):
+                            with open(sessionfile, "w") as file:
+                                file.write(
+                                    f"incremental\n{hashtocrack}\n{min_lenght} {max_length}\n{n}\n{password}\n{characters}\n{outputfile}")
+                                starting_time = time.time()
                     except Exception as error:
                         print(error)
                         sys.exit()
@@ -80,14 +92,13 @@ def customcrack(chrs, min_lenght, max_length, hashtocrack, outputfile, sessionfi
                 with open(sessionfile, "w") as file:
                     file.write(
                         f"incremental\n{hashtocrack}\n{min_lenght} {max_length}\n{n}\n{password}\n{characters}\n{outputfile}")
-                    file.close()
             sys.exit()
     else:
         print(hashtocrack + " is not the md5 hash")
 
 
 def ext(wordlist, hashtocrack, outputfile, linetoresume=None, sessionfile=None):
-    check = bool(re.match(r"([a-fA-F\d]{32}$)",hashtocrack))
+    check = bool(re.match(r"([a-fA-F\d]{32}$)", hashtocrack))
     if check:
         try:
             with open(wordlist, "r") as file:
@@ -101,7 +112,7 @@ def ext(wordlist, hashtocrack, outputfile, linetoresume=None, sessionfile=None):
             if "No such file" in str(error):
                 print("[*_*] No such file")
             sys.exit()
-
+        starting_time = time.time()
         for password in data:
             linenumber = data.index(password)
             try:
@@ -114,6 +125,11 @@ def ext(wordlist, hashtocrack, outputfile, linetoresume=None, sessionfile=None):
                         with open(outputfile, "w") as ou:
                             ou.write(password)
                         break
+                    if sessionfile != None and "00:05:00" in timer(starting_time,time.time()):
+                        with open(sessionfile, "w")as file:
+                            file.write(
+                                f"wordlist\n{hashtocrack}\n{wordlist}\n{linenumber}\n{outputfile}")
+                            starting_time = time.time()
                 except Exception as error:
                     print(error)
                     sys.exit()

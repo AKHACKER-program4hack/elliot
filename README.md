@@ -4,7 +4,7 @@
 ![Pull Requests](https://img.shields.io/github/issues-pr/AKHACKER-program4hack/elliot)
 
 The faster and time saving md5 hash cracker
-Save time by saving session
+Save time by saving session.
 
 <img src="elliotgithub.jpg">
 
@@ -34,7 +34,7 @@ optional arguments:
 
 ```
 # Session saving 
-
+If You use sessions,the tools will save the session after every 5 minute.I hope this update make you more happy
 Use ```-n``` for saving iterations while cracking md5 hash 
 example : 
 ```
